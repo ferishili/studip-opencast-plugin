@@ -23,8 +23,11 @@ class PlaylistAddVideo extends OpencastController
         $playlist = Playlists::findOneByToken($args['token']);
         $video = Videos::findOneByToken($args['vid_token']);
 
+        $json = $this->getRequestData($request);
+        $course_id = $json['course_id'];
+
         // check what permissions the current user has on the playlist and video
-        if (!Authority::canAddVideoToPlaylist($user, $playlist, $video)) {
+        if (!Authority::canAddVideoToPlaylist($user, $playlist, $video, $course_id)) {
             throw new \AccessDeniedException();
         }
 

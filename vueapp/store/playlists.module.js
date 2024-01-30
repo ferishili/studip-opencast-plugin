@@ -194,8 +194,15 @@ const actions = {
     },
 
     async addVideosToPlaylist(context, data) {
+        // Adding cid, when adding video to playlist makes it possible to recoginize the related course processes like studentUpload, etc.
+        let $cid = context?.rootState?.opencast?.cid ?? null
+        console.log('$cid', $cid);
         for (let i = 0; i < data.videos.length; i++) {
-            await ApiService.put('/playlists/' + data.playlist + '/video/' + data.videos[i]);
+            await ApiService.put('/playlists/' + data.playlist + '/video/' + data.videos[i],
+                {
+                    'course_id': $cid
+                }
+            );
         }
         context.commit('addToVideosCount', {'token': data.playlist, 'addToCount': data.videos.length});
     },
